@@ -5,6 +5,10 @@ class ProductPage extends Page {
         return $('.a-color-error')
     }
 
+    get deliveryLocation() {
+        return $('#contextualIngressPtLabel_deliveryShortLine')
+    }
+
     async open() {
         await super.open()
     }

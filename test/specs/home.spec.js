@@ -13,8 +13,9 @@ describe('Assertion for Amazom Home Page', async () => {
     })
 
     it('verify Delivery Location', async () => {
+        const testData = await JSON.parse(fs.readFileSync('test/testData.json'))
         await HomePage.open()
-        await expect(HomePage.actualDeliveryLocation).toHaveTextContaining('Belarus')
+        await expect(HomePage.actualDeliveryLocation).toHaveTextContaining(testData.actualDelivery)
     })
 
     it('verify Location Pop-up disappears', async () => {

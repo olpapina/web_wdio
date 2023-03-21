@@ -8,6 +8,7 @@ import TopDropMenu from '../pageobjects/topDropMenu.page.js'
 import GiftCardPage from '../pageobjects/giftCard.page.js'
 import ProductPage from '../pageobjects/product.page.js'
 import SelectLocationPage from '../pageobjects/selectlocation.page.js'
+import ContinuePage from '../pageobjects/continue.page.js'
 
 import fs from 'fs'
 
@@ -40,33 +41,33 @@ describe('Tests for Gift cards page for differents locations', async () => {
     it('verify that delivery is impossible to Belarus', async () => {
         const testData = await JSON.parse(fs.readFileSync('test/testData.json'))
         await HomePage.open()
-        if (LocationPopUp.notChangeButton.isPresent()) {
-            await LocationPopUp.notChangeButton.click()
-        } else {
-            await expect(LocationPopUp.notChangeButton).not.toBePresent()
+
+        await HomePage.deliveryLocationIcon.click()
+        await expect(SelectLocationPage.dropDownField).toBePresent()
+        await expect(SelectLocationPage.dropDownField).toBeClickable()
+
+        await SelectLocationPage.dropDownField.click()
+        await SelectLocationPage.dropBelarus.click()
+
+        const fieldFocus = await SelectLocationPage.dropDownField
+        await expect(fieldFocus).toHaveAttrContaining('class', 'a-button-focus')
+        if (SelectLocationPage.dropDownField.isFocused()) {
+            await SelectLocationPage.clickTab('GLUXCountryListDropdown');
         }
+        await expect(SelectLocationPage.doneButton).toBeClickable()
+        await SelectLocationPage.doneButton.click()
+
+        await expect(HomePage.actualDeliveryLocation).toHaveTextContaining(testData.impossibleDelivery)
 
         if (HomePage.giftCardButton.isClickable()) {
             await HomePage.giftCardButton.click()
-        } else if (HomePage.topMenuButton.isClickable()) {
+        } else {
+            await expect(HomePage.topMenuButton).toBePresent()
             await HomePage.topMenuButton.click()
+            await expect(TopDropMenu.giftCardsItem).toBeDisplayed()
             await TopDropMenu.giftCardsItem.click()
-        }
-        else {
-            await HomePage.deliveryLocationIcon.click()
-            await expect(SelectLocationPage.dropDownField).toBePresent()
-            await expect(SelectLocationPage.dropDownField).toBeClickable()
-
-            await SelectLocationPage.dropDownField.click()
-            await SelectLocationPage.dropBelarus.click()
-
-            const fieldFocus = await SelectLocationPage.dropDownField
-            await expect(fieldFocus).toHaveAttrContaining('class', 'a-button-focus')
-            if (SelectLocationPage.dropDownField.isFocused()) {
-                await SelectLocationPage.triggerBlur('GLUXCountryListDropdown');
-            }
-            await expect(SelectLocationPage.doneButton).toBePresent()
-            await browser.buttonDown(button).click()
+            await expect(TopDropMenu.allGiftMCardsItem).toBeDisplayed()
+            await TopDropMenu.allGiftMCardsItem.click()
         }
 
         await GiftCardPage.typeOfCard[7].click()
@@ -78,6 +79,56 @@ describe('Tests for Gift cards page for differents locations', async () => {
             await ResultPage.productIcon[i].click()
             await expect(ProductPage.deliveryValidationMessage).toBeDisplayed()
             await expect(ProductPage.deliveryValidationMessage).toHaveTextContaining(testData.validationMessage)
+            await browser.back();
+            results = await ResultPage.productIcon
+        }
+    })
+
+    it('verify that delivery is possible to US', async () => {
+        const testData = await JSON.parse(fs.readFileSync('test/testData.json'))
+        await HomePage.open()
+
+
+        await HomePage.deliveryLocationIcon.waitForExist({ timeout: 5000 })
+        
+        await HomePage.deliveryLocationIcon.click()
+        await SelectLocationPage.enterZipCodeField.setValue(testData.zipCode)
+
+
+        if (SelectLocationPage.enterZipCodeField.isFocused()) {
+            await SelectLocationPage.clickTab('GLUXZipUpdateInput');
+        }
+        await SelectLocationPage.applyButton.click()
+
+        await ContinuePage.continueButton.click()
+        await expect(HomePage.actualDeliveryLocation).toHaveTextContaining(testData.possibleDelivery)
+
+        await expect(HomePage.topMenuButton).toBePresent()
+        await HomePage.topMenuButton.click()
+
+        await expect(TopDropMenu.seeAllButtons).toBePresent()
+        await expect(TopDropMenu.seeAllButtons).toBeDisplayed()
+        await TopDropMenu.seeAllButtons[0].waitForExist({ timeout: 5000 })
+        await TopDropMenu.seeAllButtons[0].scrollIntoView()
+        await TopDropMenu.seeAllButtons[1].scrollIntoView()
+        await TopDropMenu.seeAllButtons[1].click()
+        await TopDropMenu.giftCardsItem.scrollIntoView()
+        await expect(TopDropMenu.giftCardsItem).toBeDisplayed()
+        await TopDropMenu.giftCardsItem.click()
+        await expect(TopDropMenu.allGiftMCardsItem).toBeDisplayed()
+        await TopDropMenu.allGiftMCardsItem.click()
+   
+        await expect(GiftCardPage.typeOfCard).toBeDisplayed()
+        await GiftCardPage.typeOfCard[7].click()
+        await expect(ResultPage.productIcon).toBeExisting()
+        let results = await ResultPage.productIcon
+
+        for (let i = 1; i < 5; i++) {
+            await expect(ResultPage.productIcon[i]).toBeClickable()
+            await ResultPage.productIcon[i].click()
+            await expect(ProductPage.deliveryValidationMessage).not.toBeDisplayed()
+            await expect(ProductPage.deliveryValidationMessage).not.toHaveTextContaining(testData.validationMessage)
+            await expect(ProductPage.deliveryLocation).toHaveTextContaining(testData.zipCode)
             await browser.back();
             results = await ResultPage.productIcon
         }

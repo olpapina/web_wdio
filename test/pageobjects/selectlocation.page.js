@@ -6,11 +6,11 @@ class SelectLocationPage extends Page {
     }
 
     get doneButton() {
-        return $('#a-autoid-3')
+        return $('//*[contains(text(),"Done")]')
     }
 
     get applyButton() {
-        return $('#GLUXZipUpdate-announce')
+        return $('#GLUXZipUpdate')
     }
 
     get enterZipCodeField() {
@@ -21,10 +21,8 @@ class SelectLocationPage extends Page {
         return $('#GLUXCountryListDropdown')
     }
 
-    async triggerBlur(elementSelector) {
-        await browser.executeAsync((f) => {
-            document.getElementById(f).blur()
-        }, elementSelector);
+    async clickTab(elementSelector) {
+        await browser.keys("\uE004")
     }
 
     async open() {

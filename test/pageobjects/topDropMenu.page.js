@@ -2,7 +2,7 @@ import Page from './page.js'
 
 class TopDropMenu extends Page {
     get seeAllButtons() {
-        return $('.hmenu-compressed-btn')
+        return $$('//*[@id="hmenu-content"]//*[contains(text(),"see all")]')
     }
     get giftCardsItem() {
         return $('//*[@id="hmenu-content"]//*[contains(text(),"Gift Cards")]')
