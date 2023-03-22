@@ -1,6 +1,6 @@
 {
     "zipCode": "83877",
-    "actualDelivery": "Poland",
+    "actualDelivery": "Select your address",
     "impossibleDelivery": "Belarus",
     "possibleDelivery": "Post Falls",
     "validationMessage": "This item cannot be shipped to your selected delivery location. Please choose a different delivery location.",
