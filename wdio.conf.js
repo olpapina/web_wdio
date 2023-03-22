@@ -158,6 +158,14 @@ export const config = {
             },
             launch: {
                 displayName: 'Zebrunner wdio test',
+            },
+            testRail: {
+                pushResults: true,
+                pushInRealTime: true,
+                suiteId: 189,
+                runId: 685,
+                includeAllTestCasesInNewRun: true,
+                runName: 'WDIO Test Run'
             }
         },
         //----------------------- Zebrunner Reporter configuration -----------------------

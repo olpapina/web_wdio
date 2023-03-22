@@ -3,7 +3,6 @@ import SignInPopUp from '../pageobjects/singInPopUp.page.js'
 import SignInPage from '../pageobjects/signInPage.page.js'
 import SearchBox from '../pageobjects/searchBox.page.js'
 import ResultPage from '../pageobjects/result.page.js'
-import LocationPopUp from '../pageobjects/locationPopUp.page.js'
 import TopDropMenu from '../pageobjects/topDropMenu.page.js'
 import GiftCardPage from '../pageobjects/giftCard.page.js'
 import ProductPage from '../pageobjects/product.page.js'
@@ -25,6 +24,7 @@ describe('Tests for SignIn and Search with filtering', async () => {
     })
 
     it('verify Searching and Filtering', async () => {
+        testRail.testCaseId("C3550");
         const testData = await JSON.parse(fs.readFileSync('test/testData.json'))
         await HomePage.open()
         await SearchBox.searchField.setValue(testData.searchText)
@@ -39,6 +39,7 @@ describe('Tests for SignIn and Search with filtering', async () => {
 
 describe('Tests for Gift cards page for differents locations', async () => {
     it('verify that delivery is impossible to Belarus', async () => {
+        testRail.testCaseId("C3545");
         const testData = await JSON.parse(fs.readFileSync('test/testData.json'))
         await HomePage.open()
 
@@ -85,6 +86,7 @@ describe('Tests for Gift cards page for differents locations', async () => {
     })
 
     it('verify that delivery is possible to US', async () => {
+        testRail.testCaseId("C3547");
         const testData = await JSON.parse(fs.readFileSync('test/testData.json'))
         await HomePage.open()
 
