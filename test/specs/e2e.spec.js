@@ -8,6 +8,7 @@ import GiftCardPage from '../pageobjects/giftCard.page.js'
 import ProductPage from '../pageobjects/product.page.js'
 import SelectLocationPage from '../pageobjects/selectlocation.page.js'
 import ContinuePage from '../pageobjects/continue.page.js'
+import {testRail} from '@zebrunner/javascript-agent-webdriverio'
 
 import fs from 'fs'
 

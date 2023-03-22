@@ -164,8 +164,8 @@ export const config = {
                 pushInRealTime: true,
                 suiteId: 189,
                 runId: 685,
-                includeAllTestCasesInNewRun: true,
-                runName: 'WDIO Test Run'
+                includeAllTestCasesInNewRun: false,
+                runName: 'OlgaP'
             }
         },
         //----------------------- Zebrunner Reporter configuration -----------------------
