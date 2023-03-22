@@ -1,4 +1,4 @@
-import {ZebrunnerReporter} from '@zebrunner/javascript-agent-webdriver';
+import {ZebrunnerReporter, ZebrunnerService} from '@zebrunner/javascript-agent-webdriver';
 import * as dotenv from 'dotenv' 
 dotenv.config();
 
