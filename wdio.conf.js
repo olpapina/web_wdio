@@ -1,3 +1,21 @@
+import { ZebrunnerReporter } from '@zebrunner/javascript-agent-webdriver';
+import ("dotenv").config();
+
+const config1 = {
+    enabled: true,
+    reportingServerHostname: "https://solvdinternal.zebrunner.com",
+    reportingServerAccessToken:"bAShxcsDMzzJY1XoOo8ynAdQm4cbiQlP920L23mU6VosGHyrHS",
+    reportingProjectKey: "DEF",
+    reportingRunDisplayName: "Amazon web tests",
+    reportingRunBuild: "wdio-tests",
+    reportingRunEnvironment: "TEST",
+    reportingRunLocale: "en_US",
+    reportingNotificationNotifyOnEachFailure: true,
+    reportingNotificationEmails: "opapina@solvd.com",
+    reportingMilestoneId: "1",
+    reportingMilestoneName: "amazon-web",
+  };
+
 export const config = {
     //
     // ====================
@@ -134,7 +152,8 @@ export const config = {
     // Test reporter for stdout.
     // The only one supported by default is 'dot'
     // see also: https://webdriver.io/docs/dot-reporter
-    reporters: ['spec'],
+    reporters: ['spec', [ZebrunnerReporter, config1]],
+    
 
 
     
@@ -293,3 +312,4 @@ export const config = {
     // onReload: function(oldSessionId, newSessionId) {
     // }
 }
+

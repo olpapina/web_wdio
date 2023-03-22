@@ -1,7 +1,6 @@
 {
   "name": "web_wdio",
   "type": "module",
-  
   "devDependencies": {
     "@wdio/cli": "^8.6.2",
     "@wdio/local-runner": "^8.6.2",
@@ -16,5 +15,8 @@
   },
   "scripts": {
     "wdio": "wdio run ./wdio.conf.js"
+  },
+  "dependencies": {
+    "javascript-agent-webdriver": "^2.0.0"
   }
 }
