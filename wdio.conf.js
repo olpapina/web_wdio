@@ -1,20 +1,4 @@
-import { ZebrunnerReporter } from '@zebrunner/javascript-agent-webdriver';
-import ("dotenv").config();
-
-const config1 = {
-    enabled: true,
-    reportingServerHostname: "https://solvdinternal.zebrunner.com",
-    reportingServerAccessToken:"bAShxcsDMzzJY1XoOo8ynAdQm4cbiQlP920L23mU6VosGHyrHS",
-    reportingProjectKey: "DEF",
-    reportingRunDisplayName: "Amazon web tests",
-    reportingRunBuild: "wdio-tests",
-    reportingRunEnvironment: "TEST",
-    reportingRunLocale: "en_US",
-    reportingNotificationNotifyOnEachFailure: true,
-    reportingNotificationEmails: "opapina@solvd.com",
-    reportingMilestoneId: "1",
-    reportingMilestoneName: "amazon-web",
-  };
+const { ZebrunnerReporter, ZebrunnerService } = require('@zebrunner/javascript-agent-webdriverio');
 
 export const config = {
     //
@@ -22,6 +6,7 @@ export const config = {
     // Runner Configuration
     // ====================
     // WebdriverIO supports running e2e tests as well as unit and component tests.
+    reporterSyncInterval: 60 * 1000,
     runner: 'local',
     
     //
@@ -68,15 +53,23 @@ export const config = {
     // If you have trouble getting all important capabilities together, check out the
     // Sauce Labs platform configurator - a great tool to configure your capabilities:
     // https://saucelabs.com/platform/platform-configurator
+    protocol: 'https',
+    hostname: 'engine.zebrunner.com',
+    port: 443,
+    path: '/wd/hub',
+    user: 'user',
+    key: 'key',
     //
     capabilities: [{
     
         // maxInstances can get overwritten per capability. So if you have an in-house Selenium
         // grid with only 5 firefox instances available you can make sure that not more than
         // 5 instances get started at a time.
-        maxInstances: 5,
+        maxInstances: 1,
+        platformName: 'Linux',
         //
         browserName: 'chrome',
+        browserVersion: '110.0',
         acceptInsecureCerts: true
         // If outputDir is provided WebdriverIO can capture driver session logs
         // it is possible to configure which logTypes to include/exclude.
@@ -130,7 +123,7 @@ export const config = {
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    services: ['chromedriver'],
+    services: [[ZebrunnerService]],
     
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
@@ -152,7 +145,24 @@ export const config = {
     // Test reporter for stdout.
     // The only one supported by default is 'dot'
     // see also: https://webdriver.io/docs/dot-reporter
-    reporters: ['spec', [ZebrunnerReporter, config1]],
+    reporters: ['spec', [
+        // replace the following block with your ZebrunnerReporter configuration
+        //----------------------- Zebrunner Reporter configuration -----------------------
+        ZebrunnerReporter,
+        {
+            enabled: true,
+            projectKey: 'DEF',
+            server: {
+                hostname: 'https://mycompany.zebrunner.com/',
+                accessToken: 'accessToken',
+            },
+            launch: {
+                displayName: 'Zebrunner wdio test',
+            }
+        },
+        //----------------------- Zebrunner Reporter configuration -----------------------
+    ]
+],
     
 
 
