@@ -70,12 +70,7 @@ export const config = {
     // If you have trouble getting all important capabilities together, check out the
     // Sauce Labs platform configurator - a great tool to configure your capabilities:
     // https://saucelabs.com/platform/platform-configurator
-    protocol: 'https',
-    hostname: 'engine.zebrunner.com',
-    port: 443,
-    path: '/wd/hub',
-    user: 'user',
-    key: 'key',
+    
     //
     capabilities: [{
     
@@ -140,7 +135,7 @@ export const config = {
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    services: [chromedriver],
+    services: [[ZebrunnerService]],
     
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
