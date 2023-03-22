@@ -1,4 +1,4 @@
-const { ZebrunnerReporter, ZebrunnerService } = require('@zebrunner/javascript-agent-webdriverio');
+import { ZebrunnerReporter, ZebrunnerService } from '@zebrunner/javascript-agent-webdriverio';
 
 export const config = {
     //
