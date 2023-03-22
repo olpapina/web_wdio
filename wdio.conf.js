@@ -1,4 +1,21 @@
-import { ZebrunnerReporter, ZebrunnerService } from '@zebrunner/javascript-agent-webdriverio';
+import { ZebrunnerReporter} from '@zebrunner/javascript-agent-webdriverio';
+import * as dotenv from 'dotenv' 
+dotenv.config();
+
+const config1 = {
+    enabled: true,
+    reportingServerHostname: "https://solvdinternal.zebrunner.com",
+    reportingProjectKey: "DEF",
+    reportingRunDisplayName: "Zebra wdio test",
+    reportingRunBuild: "amazon wdio",
+    reportingRunEnvironment: "STAGE",
+    reportingRunLocale: "en_US",
+    reportingNotificationNotifyOnEachFailure: true,
+    reportingNotificationEmails: "opapina@solvd.com",
+    reportingMilestoneId: "1",
+    reportingMilestoneName: "test",
+  };
+  
 
 export const config = {
     //
@@ -123,7 +140,7 @@ export const config = {
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    services: [[ZebrunnerService]],
+    services: [chromedriver],
     
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
@@ -145,25 +162,10 @@ export const config = {
     // Test reporter for stdout.
     // The only one supported by default is 'dot'
     // see also: https://webdriver.io/docs/dot-reporter
-    reporters: ['spec', [
+    reporters: ['spec', [ZebrunnerReporter, config1]],
         // replace the following block with your ZebrunnerReporter configuration
         //----------------------- Zebrunner Reporter configuration -----------------------
-        ZebrunnerReporter,
-        {
-            enabled: true,
-            projectKey: 'DEF',
-            server: {
-                hostname: 'https://mycompany.zebrunner.com/',
-                accessToken: 'accessToken',
-            },
-            launch: {
-                displayName: 'Zebrunner wdio test',
-            }
-        },
-        //----------------------- Zebrunner Reporter configuration -----------------------
-    ]
-],
-    
+        
 
 
     

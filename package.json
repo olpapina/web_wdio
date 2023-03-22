@@ -17,6 +17,6 @@
     "wdio": "wdio run ./wdio.conf.js"
   },
   "dependencies": {
-    "@zebrunner/javascript-agent-webdriverio": "^1.1.1"
+    "@zebrunner/javascript-agent-webdriverio": "^2.0.0"
   }
 }
