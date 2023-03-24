@@ -1,11 +1,12 @@
 {
   "name": "web_wdio",
   "type": "module",
-  
   "devDependencies": {
     "@wdio/cli": "^8.6.2",
+    "@wdio/junit-reporter": "^8.6.6",
     "@wdio/local-runner": "^8.6.2",
     "@wdio/mocha-framework": "^8.6.1",
+    "@wdio/selenium-standalone-service": "^8.6.6",
     "@wdio/spec-reporter": "^8.4.0",
     "chromedriver": "^111.0.0",
     "geckodriver": "^3.2.0",
