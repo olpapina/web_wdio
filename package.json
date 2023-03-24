@@ -2,6 +2,7 @@
   "name": "web_wdio",
   "type": "module",
   "devDependencies": {
+    "node": "^19.4.0",
     "@wdio/cli": "^8.6.2",
     "@wdio/junit-reporter": "^8.6.6",
     "@wdio/local-runner": "^8.6.2",

@@ -56,7 +56,7 @@ export const config = {
         // maxInstances can get overwritten per capability. So if you have an in-house Selenium
         // grid with only 5 firefox instances available you can make sure that not more than
         // 5 instances get started at a time.
-        maxInstances: 5,
+        maxInstances: 3,
         //
         browserName: 'chrome',
         acceptInsecureCerts: true
@@ -64,7 +64,14 @@ export const config = {
         // it is possible to configure which logTypes to include/exclude.
         // excludeDriverLogs: ['*'], // pass '*' to exclude all driver session logs
         // excludeDriverLogs: ['bugreport', 'server'],
-    }],
+    }, 
+    {
+        maxInstances: 3,
+        browserName: 'firefox',
+        acceptInsecureCerts: true
+    }
+],
+
     //
     // ===================
     // Test Configurations
@@ -136,7 +143,7 @@ export const config = {
     // see also: https://webdriver.io/docs/dot-reporter
     reporters: ['spec',
         ['junit', {
-            outputDir: './report',
+            outputDir: './reports/junit',
             outputFileFormat: function (options) {
                 return `results-${new Date().getTime()}.xml`;
             }
