@@ -1,4 +1,10 @@
+import { ReportAggregator, HtmlReporter } from 'wdio-html-nice-reporter'
+import log4js from 'log4js'
+let reportAggregator;
+
 export const config = {
+
+
     //
     // ====================
     // Runner Configuration
@@ -51,26 +57,31 @@ export const config = {
     // Sauce Labs platform configurator - a great tool to configure your capabilities:
     // https://saucelabs.com/platform/platform-configurator
     //
-    capabilities: [{
+    // hostname: 'localhost',
+    // port: 8080,
+    // protocol: 'http',
+    capabilities: [
+        {
 
         // maxInstances can get overwritten per capability. So if you have an in-house Selenium
         // grid with only 5 firefox instances available you can make sure that not more than
         // 5 instances get started at a time.
         maxInstances: 3,
-        //
+        
         browserName: 'chrome',
-        acceptInsecureCerts: true
+        // acceptInsecureCerts: true
         // If outputDir is provided WebdriverIO can capture driver session logs
         // it is possible to configure which logTypes to include/exclude.
         // excludeDriverLogs: ['*'], // pass '*' to exclude all driver session logs
         // excludeDriverLogs: ['bugreport', 'server'],
-    }, 
-    {
-        maxInstances: 3,
-        browserName: 'firefox',
-        acceptInsecureCerts: true
-    }
-],
+        }, 
+        {
+            maxInstances: 3,
+            browserName: 'firefox',
+            acceptInsecureCerts: true
+        }
+
+    ],
 
     //
     // ===================
@@ -119,7 +130,7 @@ export const config = {
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    services: ['selenium-standalone'],
+    services: ['chromedriver', 'geckodriver'],
 
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
@@ -142,16 +153,41 @@ export const config = {
     // The only one supported by default is 'dot'
     // see also: https://webdriver.io/docs/dot-reporter
     reporters: ['spec',
-        ['junit', {
-            outputDir: './reports/junit',
-            outputFileFormat: function (options) {
-                return `results-${new Date().getTime()}.xml`;
-            }
-        }]
+        ["html-nice", {
+            outputDir: './reports/html-reports/',
+            filename: 'report.html',
+            reportTitle: 'Html Report Title',
+            linkScreenshots: true,
+            //to show the report in a browser when done
+            showInBrowser: true,
+            collapseTests: false,
+            //to turn on screenshots after every test
+            useOnAfterCommandForScreenshot: false,
+
+            //to initialize the logger
+            LOG: log4js.getLogger("default")
+        }
+        ]
     ],
 
+    onPrepare: function (config, capabilities) {
+
+        reportAggregator = new ReportAggregator({
+            outputDir: './reports/html-reports/',
+            filename: 'master-report.html',
+            reportTitle: 'Master Report',
+            browserName: capabilities.browserName,
+            collapseTests: true
+        });
+        reportAggregator.clean();
+    },
 
 
+    onComplete: function (exitCode, config, capabilities, results) {
+        (async () => {
+            await reportAggregator.createReport();
+        })();
+    },
 
     //
     // Options to be passed to Mocha.
@@ -264,6 +300,7 @@ export const config = {
      */
     // afterSuite: function (suite) {
     // },
+
     /**
      * Runs after a WebdriverIO command gets executed
      * @param {String} commandName hook command name
