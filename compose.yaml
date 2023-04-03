@@ -1,0 +1,83 @@
+version: '2.0'
+
+services:
+
+  selenoid:
+    networks:
+      - selenoid
+    image: aerokube/selenoid:latest-release
+    volumes:
+      - ".:/etc/selenoid"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      # - "./opt/selenoid/video:/opt/selenoid/video"
+      - "./opt/selenoid/logs:/opt/selenoid/logs"
+    # environment:
+    #   - "OVERRIDE_VIDEO_OUTPUT_DIR=$PWD/selenoid-outputs/video"
+    command: [
+        "-conf", # Flag for browsers configuration
+        "/etc/selenoid/browsers.json", # Location for browsers configuration file
+        # "-video-output-dir", # Flag to save recorded video in a directory
+        # "/opt/selenoid/video", # Location of the directory
+        "-log-output-dir", # Flag to save logs in a directory
+        "/opt/selenoid/logs", # Location of the directory
+        "-container-network", 
+        "selenoid",
+        "-limit", # Flag for number of simultaneous container to run
+        "5", # run count
+        "-save-all-logs", # to save all logs without considering capabilities
+        "-enable-file-upload", # file upload support
+      ]
+    ports:
+      - "4444:4444"
+
+  # video:
+  #   image: selenoid/video-recorder:latest-release
+
+  # selenoid-ui:
+  #   image: "aerokube/selenoid-ui"
+  #   networks:
+  #     - selenoid
+  #   links:
+  #     - selenoid
+  #   depends_on:
+  #     - selenoid
+  #   ports:
+  #     - "8080:8080"
+  #   command: [ "--selenoid-uri", "http://selenoid:4444" ]
+
+  chrome_100.0:
+    image: "sskorol/selenoid_chromium_vnc:100.0"
+    container_name: chrome_100.0
+    networks:
+      - selenoid
+    links:
+      - selenoid
+      # - selenoid-ui
+    depends_on:
+      - selenoid
+      # - selenoid-ui
+    volumes:
+      - "/dev/shm:/dev/shm"
+
+  app:
+    build:
+      context: .
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    links:
+      - selenoid
+      - chrome_100.0
+      # - selenoid-ui
+    depends_on:
+      - selenoid
+      - chrome_100.0
+      # - selenoid-ui
+    networks:
+      - selenoid
+    environment:
+     - SELENOID=true
+
+networks:  
+  selenoid:
+    name: selenoid
