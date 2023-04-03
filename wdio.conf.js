@@ -68,6 +68,7 @@ export const config = {
         //
         browserName: 'chrome',
         "selenoid:options" : { enableVNC: true },
+        "selenoid:options" : { enableVideo: true },
         acceptInsecureCerts: true
         // If outputDir is provided WebdriverIO can capture driver session logs
         // it is possible to configure which logTypes to include/exclude.

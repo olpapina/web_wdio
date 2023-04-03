@@ -1,4 +1,4 @@
-version: '2.0'
+version: '4.0'
 
 services:
 
@@ -9,29 +9,29 @@ services:
     volumes:
       - ".:/etc/selenoid"
       - "/var/run/docker.sock:/var/run/docker.sock"
-      # - "./opt/selenoid/video:/opt/selenoid/video"
+      - "./opt/selenoid/video:/opt/selenoid/video"
       - "./opt/selenoid/logs:/opt/selenoid/logs"
-    # environment:
-    #   - "OVERRIDE_VIDEO_OUTPUT_DIR=$PWD/selenoid-outputs/video"
+    environment:
+      - "OVERRIDE_VIDEO_OUTPUT_DIR=$PWD/opt/selenoid/video"
     command: [
-        "-conf", # Flag for browsers configuration
-        "/etc/selenoid/browsers.json", # Location for browsers configuration file
-        # "-video-output-dir", # Flag to save recorded video in a directory
-        # "/opt/selenoid/video", # Location of the directory
-        "-log-output-dir", # Flag to save logs in a directory
-        "/opt/selenoid/logs", # Location of the directory
+        "-conf",
+        "/etc/selenoid/browsers.json",
+        "-video-output-dir",
+        "/opt/selenoid/video", 
+        "-log-output-dir",
+        "/opt/selenoid/logs",
         "-container-network", 
         "selenoid",
-        "-limit", # Flag for number of simultaneous container to run
-        "5", # run count
-        "-save-all-logs", # to save all logs without considering capabilities
-        "-enable-file-upload", # file upload support
+        "-limit",
+        "5",
+        "-save-all-logs",
+        "-enable-file-upload", 
       ]
     ports:
       - "4444:4444"
 
-  # video:
-  #   image: selenoid/video-recorder:latest-release
+  video:
+    image: selenoid/video-recorder:latest-release
 
   selenoid-ui:
     image: "aerokube/selenoid-ui"
