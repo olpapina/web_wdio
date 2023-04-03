@@ -58,6 +58,7 @@ export const config = {
     capabilities: [
         
         {
+            //enableVNC: true,
         // enableVideo: true,
 
         // maxInstances can get overwritten per capability. So if you have an in-house Selenium
@@ -66,6 +67,7 @@ export const config = {
         maxInstances: 3,
         //
         browserName: 'chrome',
+        "selenoid:options" : { enableVNC: true },
         acceptInsecureCerts: true
         // If outputDir is provided WebdriverIO can capture driver session logs
         // it is possible to configure which logTypes to include/exclude.

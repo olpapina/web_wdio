@@ -33,17 +33,17 @@ services:
   # video:
   #   image: selenoid/video-recorder:latest-release
 
-  # selenoid-ui:
-  #   image: "aerokube/selenoid-ui"
-  #   networks:
-  #     - selenoid
-  #   links:
-  #     - selenoid
-  #   depends_on:
-  #     - selenoid
-  #   ports:
-  #     - "8080:8080"
-  #   command: [ "--selenoid-uri", "http://selenoid:4444" ]
+  selenoid-ui:
+    image: "aerokube/selenoid-ui"
+    networks:
+      - selenoid
+    links:
+      - selenoid
+    depends_on:
+      - selenoid
+    ports:
+      - "8080:8080"
+    command: [ "--selenoid-uri", "http://selenoid:4444" ]
 
   chrome_100.0:
     image: "sskorol/selenoid_chromium_vnc:100.0"
@@ -52,10 +52,10 @@ services:
       - selenoid
     links:
       - selenoid
-      # - selenoid-ui
+      - selenoid-ui
     depends_on:
       - selenoid
-      # - selenoid-ui
+      - selenoid-ui
     volumes:
       - "/dev/shm:/dev/shm"
 
@@ -68,11 +68,11 @@ services:
     links:
       - selenoid
       - chrome_100.0
-      # - selenoid-ui
+      - selenoid-ui
     depends_on:
       - selenoid
       - chrome_100.0
-      # - selenoid-ui
+      - selenoid-ui
     networks:
       - selenoid
     environment:
