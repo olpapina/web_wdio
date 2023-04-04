@@ -29,25 +29,46 @@ services:
       ]
     ports:
       - "4444:4444"
+      
+  ggr:
+    image: aerokube/ggr
+    ports:
+      - "4446:4446"
+    volumes:
+      - "./:/etc/grid-router:ro"
+    command: ["-quotaDir", "/etc/grid-router/quota", "-listen", ":4446"]
+    networks:
+      - selenoid
+
+  selenoid-ui:
+    restart: always
+    image: aerokube/selenoid-ui
+    networks:
+      - selenoid
+    ports:
+      - "8080:8080"
+    command: ["--selenoid-uri", "http://ggr-ui:8888"]
 
   video:
     image: selenoid/video-recorder:latest-release
 
-  selenoid-ui:
-    image: "aerokube/selenoid-ui"
+  chrome_100.0:
+    image: "sskorol/selenoid_chromium_vnc:100.0"
+    container_name: chrome_100.0
     networks:
       - selenoid
     links:
       - selenoid
+      - selenoid-ui
     depends_on:
       - selenoid
-    ports:
-      - "8080:8080"
-    command: [ "--selenoid-uri", "http://selenoid:4444" ]
+      - selenoid-ui
+    volumes:
+      - "/dev/shm:/dev/shm"
 
-  chrome_100.0:
-    image: "sskorol/selenoid_chromium_vnc:100.0"
-    container_name: chrome_100.0
+  firefox:
+    image: "selenoid/firefox:latest"
+    container_name: firefox
     networks:
       - selenoid
     links:
@@ -68,10 +89,12 @@ services:
     links:
       - selenoid
       - chrome_100.0
+      - firefox
       - selenoid-ui
     depends_on:
       - selenoid
       - chrome_100.0
+      - firefox
       - selenoid-ui
     networks:
       - selenoid
