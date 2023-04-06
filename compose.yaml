@@ -13,25 +13,29 @@ services:
       - "./opt/selenoid/logs:/opt/selenoid/logs"
     environment:
       - "OVERRIDE_VIDEO_OUTPUT_DIR=$PWD/opt/selenoid/video"
-    command: [
+    command:
+      [
         "-conf",
         "/etc/selenoid/browsers.json",
         "-video-output-dir",
-        "/opt/selenoid/video", 
+        "/opt/selenoid/video",
         "-log-output-dir",
         "/opt/selenoid/logs",
-        "-container-network", 
+        "-container-network",
         "selenoid",
         "-limit",
         "5",
         "-save-all-logs",
-        "-enable-file-upload", 
+        "-enable-file-upload"
       ]
     ports:
       - "4444:4444"
 
   video:
     image: selenoid/video-recorder:latest-release
+    links:
+      - selenoid
+      - ggr-ui
 
   selenoid-ui:
     image: "aerokube/selenoid-ui"
@@ -39,8 +43,10 @@ services:
       - selenoid
     links:
       - selenoid
+      - ggr-ui
     depends_on:
       - selenoid
+      - ggr-ui
     ports:
       - "8080:8080"
     command: [ "--selenoid-uri", "http://selenoid:4444" ]
@@ -62,15 +68,24 @@ services:
   ggr:
     image: aerokube/ggr
     ports:
-      - "4446:4446"
+      - "4446:4444"
     volumes:
-      - "./:/etc/grid-router:ro"
-    command: ["-quotaDir", "/etc/grid-router/quota", "-listen", ":4446"]
+      - "./grid-router/:/etc/grid-router:ro"
     networks:
       - selenoid
 
+  ggr-ui:
+    image: aerokube/ggr-ui:latest-release
+    container_name: ggr-uri
+    networks:
+      - selenoid
+    volumes:
+      - ./grid-router/quota:/etc/grid-router/quota:ro
+    ports:
+      - 8888:8888
+
   firefox:
-    image: "selenoid/firefox:110.0"
+    image: "selenoid/firefox"
     container_name: firefox
     networks:
       - selenoid
@@ -80,30 +95,7 @@ services:
     depends_on:
       - selenoid
       - selenoid-ui
-    volumes:
-      - "/dev/shm:/dev/shm"
 
-  app:
-    build:
-      context: .
-    volumes:
-      - ./:/app
-      - /app/node_modules
-    links:
-      - selenoid
-      - chrome_100.0
-      - firefox
-      - selenoid-ui
-    depends_on:
-      - selenoid
-      - chrome_100.0
-      - firefox
-      - selenoid-ui
-    networks:
-      - selenoid
-    environment:
-     - SELENOID=true
-
-networks:  
+networks:
   selenoid:
     name: selenoid

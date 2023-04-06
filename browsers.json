@@ -6,15 +6,36 @@
                 "image": "sskorol/selenoid_chromium_vnc:100.0",
                 "port": "4444"
             }
+        },
+        "caps": {
+            "loggingPrefs": {
+                "browser": "ALL"
+            },
+            "enableVNC": true,
+            "browserName": "chrome",
+            "sessionTimeout": "1m30s"
         }
     },
     "firefox": {
         "default": "latest",
         "versions": {
             "latest": {
-                "image": "selenoid/firefox:latest",
+                "image": "selenoid/firefox",
                 "port": "4444",
                 "path": "/wd/hub"
+            },
+            "108.0": {
+                "image": "selenoid/firefox:108.0",
+                "port": "4444",
+                "path": "/wd/hub"
+            },
+            "caps": {
+                "loggingPrefs": {
+                    "browser": "ALL"
+                },
+                "enableVNC": true,
+                "browserName": "firefox",
+                "sessionTimeout": "1m30s"
             }
         }
     }
